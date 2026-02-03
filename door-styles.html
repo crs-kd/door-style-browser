@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Door Ranges Showcase Module</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            height: calc(100vh - 80px);
+            max-height: 750px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Left Navigation Panel */
+        .nav-panel {
+            width: 45%;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            background: #fafafa;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        /* Range Selection - Tabs */
+        .range-selector {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #999;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .range-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .range-tab {
+            flex: 1;
+            padding: 16px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .range-tab:hover {
+            background: #f8f9fa;
+        }
+
+        .range-tab.active {
+            background: transparent;
+            border-bottom-color: #f29300;
+        }
+
+        .range-name {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+
+        .range-tab.active .range-name {
+            color: #f29300;
+        }
+
+        .range-tagline {
+            font-size: 0.75em;
+            color: #666;
+        }
+
+        /* Range Content Container */
+        .range-content {
+            display: none;
+            background: white;
+            border-radius: 0 0 4px 4px;
+            padding: 24px;
+        }
+
+        .range-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* USP Section */
+        .usp-section {
+            padding: 0;
+        }
+
+        .usp-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .usp-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0;
+            background: transparent;
+            border: none;
+        }
+
+        .usp-check {
+            width: 20px;
+            height: 20px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+
+        .usp-check::after {
+            content: '✓';
+            color: white;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+
+        .usp-content {
+            flex: 1;
+        }
+
+        .usp-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 2px;
+            font-size: 0.9em;
+        }
+
+        .usp-description {
+            color: #666;
+            font-size: 0.8em;
+            line-height: 1.3;
+        }
+
+        /* Collection Selector */
+        .collection-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .collection-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .collection-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fafafa;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: #555;
+            text-align: left;
+        }
+
+        .collection-btn:hover {
+            border-color: #f29300;
+            color: #f29300;
+            background: white;
+        }
+
+        .collection-btn.active {
+            background: #f29300;
+            border-color: #f29300;
+            color: white;
+            box-shadow: 0 2px 8px rgba(242, 147, 0, 0.3);
+        }
+
+        /* USP Section */
+        .usp-section {
+            padding: 0;
+        }
+
+        /* Right Style Browser Panel */
+        .style-panel {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .style-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .style-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .style-content::-webkit-scrollbar-track {
+            background: #f5f5f5;
+        }
+
+        .style-content::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+
+        .style-content::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        .style-grid {
+            padding: 30px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" fill="none"><rect width="800" height="1200" fill="%23f5f5f5"/><rect x="50" y="100" width="700" height="1000" rx="8" fill="%23e0e0e0"/><rect x="70" y="120" width="330" height="960" rx="4" fill="%23d0d0d0"/><rect x="420" y="120" width="330" height="960" rx="4" fill="%23d0d0d0"/><circle cx="235" cy="600" r="15" fill="%23c0c0c0"/><circle cx="565" cy="600" r="15" fill="%23c0c0c0"/></svg>');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            text-align: center;
+            padding: 40px;
+            z-index: 1;
+        }
+
+        .empty-state::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #041244;
+            opacity: 0.85;
+            z-index: 1;
+        }
+
+        .empty-state-content {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+        }
+
+        .empty-state-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .empty-state-text {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+
+        /* Range selected state */
+        .empty-state.range-selected {
+            background-image: none;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        }
+
+        .empty-state.range-selected::before {
+            opacity: 0.7;
+        }
+
+        .empty-state.range-selected .empty-state-title {
+            font-size: 2em;
+        }
+
+        .empty-state.range-selected .empty-state-text {
+            font-size: 1.1em;
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .style-card {
+            border: 2px solid #e8e8e8;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+
+        .style-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-color: #f29300;
+        }
+
+        .style-image {
+            width: 100%;
+            height: 340px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+        }
+
+        .style-image svg {
+            width: 60px;
+            height: 60px;
+            opacity: 0.4;
+        }
+
+        .style-name {
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95em;
+        }
+
+        /* Modal/Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 4px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #666;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f29300;
+            color: white;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 700px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+        }
+
+        .modal-image svg {
+            width: 100px;
+            height: 100px;
+            opacity: 0.4;
+        }
+
+        .modal-info {
+            padding: 24px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .modal-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .modal-subtitle {
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-panel {
+                width: 50%;
+            }
+            .style-panel {
+                width: 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+            .container {
+                flex-direction: column;
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+            .nav-panel {
+                width: 100%;
+                padding: 20px;
+                overflow-y: auto;
+            }
+            
+            .style-panel {
+                width: 100%;
+            }
+            
+            .style-content {
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .style-grid {
+                display: flex;
+                flex-direction: row;
+                gap: 16px;
+                padding-bottom: 20px;
+            }
+            
+            .style-card {
+                flex: 0 0 200px;
+                min-width: 200px;
+            }
+            
+            .style-image {
+                height: 360px;
+            }
+            
+            .modal-content {
+                max-width: 90%;
+                margin: 0 20px;
+            }
+            
+            .modal-image {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Navigation Panel -->
+        <div class="nav-panel">
+            <h1>Door Ranges</h1>
+
+            <!-- Range Selector -->
+            <div class="range-selector">
+                <div class="range-tabs">
+                    <button class="range-tab timber" data-range="timberluxe">
+                        <div class="range-name">TimberLuxe</div>
+                        <div class="range-tagline">Engineered Timber Composite</div>
+                    </button>
+                    <button class="range-tab pvcu" data-range="pvcu">
+                        <div class="range-name">PVCu</div>
+                        <div class="range-tagline">Premium PVCu Doors</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TimberLuxe Content -->
+            <div class="range-content" data-range-content="timberluxe">
+                <!-- Collection Selector for TimberLuxe -->
+                <div class="collection-section timber-collection">
+                    <div class="section-title">Select Collection</div>
+                    <div class="collection-buttons">
+                        <button class="collection-btn" data-collection-name="country">Country</button>
+                        <button class="collection-btn" data-collection-name="traditional">Traditional</button>
+                        <button class="collection-btn" data-collection-name="urban">Urban</button>
+                    </div>
+                </div>
+
+                <!-- Key Features for TimberLuxe -->
+                <div class="usp-section">
+                    <div class="section-title">Key Features</div>
+                    <div class="usp-grid">
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Authentic Wood Grain</div>
+                                <div class="usp-description">Natural timber aesthetics with engineered durability</div>
+                            </div>
+                        </div>
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Superior Security</div>
+                                <div class="usp-description">Multi-point locking with reinforced cores</div>
+                            </div>
+                        </div>
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Energy Efficient</div>
+                                <div class="usp-description">Excellent thermal performance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PVCu Content -->
+            <div class="range-content" data-range-content="pvcu">
+                <!-- Collection Selector for PVCu -->
+                <div class="collection-section">
+                    <div class="section-title">Select Collection</div>
+                    <div class="collection-buttons">
+                        <button class="collection-btn" data-collection-name="allure">Allure</button>
+                        <button class="collection-btn" data-collection-name="lorimer">Lorimer</button>
+                    </div>
+                </div>
+
+                <!-- Key Features for PVCu -->
+                <div class="usp-section">
+                    <div class="section-title">Key Features</div>
+                    <div class="usp-grid">
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Low Maintenance</div>
+                                <div class="usp-description">Weather-resistant and easy to clean</div>
+                            </div>
+                        </div>
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Cost Effective</div>
+                                <div class="usp-description">Premium quality at competitive prices</div>
+                            </div>
+                        </div>
+                        <div class="usp-item">
+                            <div class="usp-check"></div>
+                            <div class="usp-content">
+                                <div class="usp-title">Versatile Design</div>
+                                <div class="usp-description">Wide range of colors and finishes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Style Browser Panel -->
+        <div class="style-panel">
+            <div class="style-content">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-content">
+                        <div class="empty-state-title" id="emptyStateTitle">Discover Your Perfect Door</div>
+                        <div class="empty-state-text" id="emptyStateText">Select a range and collection to explore our door designs</div>
+                    </div>
+                </div>
+                <div class="style-grid" id="styleGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal/Lightbox -->
+    <div class="modal" id="doorModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-image" id="modalImage">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                </svg>
+            </div>
+            <div class="modal-info">
+                <div class="modal-title" id="modalTitle">Door Name</div>
+                <div class="modal-subtitle" id="modalSubtitle">Collection Name</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Door styles data
+        const doorStyles = {
+            timberluxe: {
+                country: ['Cottage Oak', 'Farmhouse Pine', 'Rustic Elm', 'Barn Door', 'Stable Door', 'Country Charm'],
+                traditional: ['Victorian Panel', 'Georgian Classic', 'Edwardian Elite', 'Heritage Oak', 'Period Pine', 'Classic Crown'],
+                urban: ['Metropolitan', 'City Loft', 'Minimalist', 'Contemporary Glass', 'Modern Vision', 'Urban Edge']
+            },
+            pvcu: {
+                allure: ['Diamond', 'Crystal', 'Sapphire', 'Pearl', 'Opal', 'Ruby'],
+                lorimer: ['Windsor', 'Chester', 'Brighton', 'Cambridge', 'Oxford', 'Lancaster']
+            }
+        };
+
+        const rangeNames = {
+            timberluxe: 'TimberLuxe',
+            pvcu: 'PVCu Range'
+        };
+
+        const collectionNames = {
+            country: 'Country Collection',
+            traditional: 'Traditional Collection',
+            urban: 'Urban Collection',
+            allure: 'Allure Collection',
+            lorimer: 'Lorimer Collection'
+        };
+
+        let currentRange = null;
+        let currentCollection = null;
+
+        // Range selection
+        document.querySelectorAll('.range-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const range = this.dataset.range;
+                
+                // Remove active from all range tabs
+                document.querySelectorAll('.range-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show range content
+                document.querySelectorAll('.range-content').forEach(rc => rc.classList.remove('active'));
+                document.querySelector(`[data-range-content="${range}"]`).classList.add('active');
+
+                // Clear style browser and reset collection
+                document.getElementById('styleGrid').innerHTML = '';
+                const emptyState = document.getElementById('emptyState');
+                emptyState.style.display = 'flex';
+                emptyState.classList.add('range-selected');
+                document.querySelectorAll('.collection-btn').forEach(btn => btn.classList.remove('active'));
+
+                // Update empty state text
+                document.getElementById('emptyStateTitle').textContent = rangeNames[range];
+                document.getElementById('emptyStateText').textContent = `Choose a collection from ${rangeNames[range]} to view door styles`;
+
+                currentRange = range;
+                currentCollection = null;
+            });
+        });
+
+        // Collection selection
+        document.querySelectorAll('.collection-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const collectionName = this.dataset.collectionName;
+                
+                // Remove active from sibling buttons
+                this.parentElement.querySelectorAll('.collection-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                currentCollection = collectionName;
+
+                // Show styles
+                displayStyles(currentRange, collectionName);
+            });
+        });
+
+        function displayStyles(range, collection) {
+            const styleGrid = document.getElementById('styleGrid');
+            const emptyState = document.getElementById('emptyState');
+            const styles = doorStyles[range][collection];
+            
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            styleGrid.innerHTML = '';
+            
+            styles.forEach((style, index) => {
+                const styleCard = document.createElement('div');
+                styleCard.className = 'style-card';
+                styleCard.innerHTML = `
+                    <div class="style-image">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                    </div>
+                    <div class="style-name">${style}</div>
+                `;
+                
+                // Add click handler to open modal
+                styleCard.addEventListener('click', function() {
+                    openModal(style, collectionNames[collection]);
+                });
+                
+                styleGrid.appendChild(styleCard);
+            });
+        }
+
+        // Modal functionality
+        const modal = document.getElementById('doorModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+
+        function openModal(doorName, collectionName) {
+            modalTitle.textContent = doorName;
+            modalSubtitle.textContent = collectionName;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal on close button click
+        modalClose.addEventListener('click', closeModal);
+
+        // Close modal on background click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
