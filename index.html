@@ -410,8 +410,7 @@
         .modal-content {
             background: white;
             border-radius: 4px;
-            max-width: 260px;
-            width: 100%;
+            width: auto;
             max-height: 90vh;
             overflow: hidden;
             position: relative;
@@ -444,17 +443,17 @@
         }
 
         .modal-image {
-            width: 100%;
             background: #f5f5f5;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ccc;
+            height: calc(80vh - 80px);
         }
 
         .modal-image img {
-            width: 100%;
-            height: auto;
+            height: 100%;
+            width: auto;
             display: block;
         }
 
