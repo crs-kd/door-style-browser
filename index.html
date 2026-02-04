@@ -193,7 +193,7 @@
 
         .collection-btn {
             padding: 12px 20px;
-            border: 2px solid #e0e0e0;
+            border: 1px solid #e0e0e0;
             border-radius: 4px;
             background: #fafafa;
             cursor: pointer;
@@ -352,12 +352,18 @@
 
         .style-image {
             width: 100%;
-            height: 340px;
+            aspect-ratio: 394 / 796;
             background: #f5f5f5;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ccc;
+        }
+
+        .style-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .style-image svg {
@@ -404,7 +410,7 @@
         .modal-content {
             background: white;
             border-radius: 4px;
-            max-width: 600px;
+            max-width: 320px;
             width: 100%;
             max-height: 90vh;
             overflow: hidden;
@@ -439,12 +445,17 @@
 
         .modal-image {
             width: 100%;
-            height: 700px;
             background: #f5f5f5;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ccc;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .modal-image svg {
@@ -494,55 +505,194 @@
             }
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 600px) {
             body {
                 padding: 0;
             }
             .container {
                 flex-direction: column;
-                height: 100vh;
-                max-height: none;
+                height: 680px;
+                max-height: 680px;
                 border-radius: 0;
+                max-width: 300px;
+                background: #fafafa;
             }
             .nav-panel {
                 width: 100%;
-                padding: 20px;
-                overflow-y: auto;
+                padding: 12px 12px 0 12px;
+                overflow: visible;
             }
-            
+
+            /* Reorder elements using flexbox order */
+            .range-content {
+                display: none;
+                flex-direction: column;
+                padding: 0;
+            }
+
+            .range-content.active {
+                display: flex;
+            }
+
+            /* Key features first (order 1) */
+            .usp-section {
+                order: 1;
+                margin-bottom: 0;
+                padding: 12px;
+                border-bottom: 1px solid #e0e0e0;
+            }
+
+            .usp-section .section-title {
+                font-size: 0.75em;
+                margin-bottom: 8px;
+            }
+
+            .usp-grid {
+                gap: 8px;
+            }
+
+            .usp-check {
+                width: 16px;
+                height: 16px;
+                margin-right: 8px;
+            }
+
+            .usp-title {
+                font-size: 0.8em;
+            }
+
+            .usp-description {
+                font-size: 0.7em;
+            }
+
+            /* Collection tabs second (order 2) */
+            .collection-section {
+                order: 2;
+                margin-bottom: 0;
+                padding: 12px 0 0 0;
+                border-bottom: none;
+            }
+
+            .collection-section .section-title {
+                font-size: 0.75em;
+                margin-bottom: 8px;
+                padding: 0 12px;
+            }
+
+            .collection-buttons {
+                flex-direction: row;
+                gap: 0;
+                background: transparent;
+                border-bottom: none;
+            }
+
+            .collection-btn {
+                flex: 1;
+                padding: 10px 8px;
+                border: 1px solid #e0e0e0;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+                background: transparent;
+                text-align: center;
+                font-size: 0.8em;
+            }
+
+            .collection-btn:hover {
+                background: #eee;
+                border: 1px solid #e0e0e0;
+                border-bottom: 2px solid #f29300;
+            }
+
+            .collection-btn.active {
+                background: transparent;
+                border: 1px solid #e0e0e0;
+                border-bottom: 2px solid #f29300;
+                color: #f29300;
+                box-shadow: none;
+            }
+
+            /* Range tabs styling */
+            .range-tab {
+                padding: 10px 8px;
+            }
+
+            .range-name {
+                font-size: 0.95em;
+            }
+
+            .range-tagline {
+                font-size: 0.65em;
+            }
+
             .style-panel {
                 width: 100%;
+                flex: 1;
+                min-height: 0;
+                background: transparent;
+                margin: 0;
             }
-            
+
+            /* Initial empty state styling for mobile */
+            .empty-state:not(.range-selected) {
+                position: relative;
+                padding: 20px;
+            }
+
+            .empty-state:not(.range-selected) .empty-state-title {
+                font-size: 1.5em;
+            }
+
+            .empty-state:not(.range-selected) .empty-state-text {
+                font-size: 1em;
+            }
+
+            /* Hide empty state once a range is selected on mobile */
+            .empty-state.range-selected {
+                display: none !important;
+            }
+
             .style-content {
                 overflow-x: auto;
                 overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
+                height: 100%;
+                background: white;
+                margin: 0 12px 12px 12px;
             }
-            
+
             .style-grid {
                 display: flex;
                 flex-direction: row;
-                gap: 16px;
-                padding-bottom: 20px;
+                gap: 12px;
+                padding: 12px 0;
             }
-            
+
             .style-card {
-                flex: 0 0 200px;
-                min-width: 200px;
+                flex: 0 0 105px;
+                min-width: 105px;
+                background: #fafafa;
+                border: 1px solid #e8e8e8;
+                border-radius: 0;
             }
-            
-            .style-image {
-                height: 360px;
+
+            .style-name {
+                padding: 8px 8px 4px;
+                font-size: 0.8em;
             }
-            
+
+            .style-color {
+                padding: 0 8px 8px;
+                font-size: 0.7em;
+            }
+
             .modal-content {
-                max-width: 90%;
-                margin: 0 20px;
+                max-width: 276px;
+                margin: 0 12px;
             }
-            
+
             .modal-image {
-                height: 500px;
+                aspect-ratio: 394 / 796;
+                height: auto;
             }
         }
     </style>
@@ -551,8 +701,6 @@
     <div class="container">
         <!-- Left Navigation Panel -->
         <div class="nav-panel">
-            <h1>Door Ranges</h1>
-
             <!-- Range Selector -->
             <div class="range-selector">
                 <div class="range-tabs">
@@ -752,6 +900,9 @@
                 emptyState.classList.add('range-selected');
                 document.querySelectorAll('.collection-btn').forEach(btn => btn.classList.remove('active'));
 
+                // Remove collection-selected class since no collection is selected
+                document.querySelector('.container').classList.remove('collection-selected');
+
                 // Update empty state text
                 document.getElementById('emptyStateTitle').textContent = rangeNames[range];
                 document.getElementById('emptyStateText').textContent = `Choose a collection from ${rangeNames[range]} to view door styles`;
@@ -765,12 +916,15 @@
         document.querySelectorAll('.collection-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const collectionName = this.dataset.collectionName;
-                
+
                 // Remove active from sibling buttons
                 this.parentElement.querySelectorAll('.collection-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
                 currentCollection = collectionName;
+
+                // Add collection-selected class to container for mobile styling
+                document.querySelector('.container').classList.add('collection-selected');
 
                 // Show styles
                 displayStyles(currentRange, collectionName);
@@ -793,11 +947,7 @@
                 styleCard.className = 'style-card';
                 styleCard.innerHTML = `
                     <div class="style-image">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <polyline points="21 15 16 10 5 21"/>
-                        </svg>
+                        <img src="Toyko_GoldenOak_Adina.jpg" alt="${style}">
                     </div>
                     <div class="style-name">${style}</div>
                     <div class="style-color">${color}</div>
@@ -815,11 +965,13 @@
         // Modal functionality
         const modal = document.getElementById('doorModal');
         const modalClose = document.getElementById('modalClose');
+        const modalImage = document.getElementById('modalImage');
         const modalTitle = document.getElementById('modalTitle');
         const modalSubtitle = document.getElementById('modalSubtitle');
         const modalColor = document.getElementById('modalColor');
 
         function openModal(doorName, collectionName, color) {
+            modalImage.innerHTML = `<img src="Toyko_GoldenOak_Adina.jpg" alt="${doorName}">`;
             modalTitle.textContent = doorName;
             modalSubtitle.textContent = collectionName;
             modalColor.textContent = color;
