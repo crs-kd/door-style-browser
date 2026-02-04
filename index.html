@@ -410,7 +410,7 @@
         .modal-content {
             background: white;
             border-radius: 4px;
-            max-width: 320px;
+            max-width: 260px;
             width: 100%;
             max-height: 90vh;
             overflow: hidden;
@@ -465,25 +465,25 @@
         }
 
         .modal-info {
-            padding: 24px;
+            padding: 16px;
             border-top: 1px solid #e8e8e8;
         }
 
         .modal-title {
-            font-size: 1.4em;
+            font-size: 1.1em;
             font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 8px;
-        }
-
-        .modal-subtitle {
-            font-size: 0.95em;
-            color: #666;
             margin-bottom: 4px;
         }
 
+        .modal-subtitle {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
         .modal-color {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #999;
         }
 
@@ -589,7 +589,7 @@
             .collection-btn {
                 flex: 1;
                 padding: 10px 8px;
-                border: 1px solid #e0e0e0;
+                border: none;
                 border-bottom: 2px solid transparent;
                 border-radius: 0;
                 background: transparent;
@@ -599,13 +599,13 @@
 
             .collection-btn:hover {
                 background: #eee;
-                border: 1px solid #e0e0e0;
+                border: none;
                 border-bottom: 2px solid #f29300;
             }
 
             .collection-btn.active {
                 background: transparent;
-                border: 1px solid #e0e0e0;
+                border: none;
                 border-bottom: 2px solid #f29300;
                 color: #f29300;
                 box-shadow: none;
@@ -831,38 +831,69 @@
     </div>
 
     <script>
-        // Door styles data
-        const doorStyles = {
-            timberluxe: {
-                country: ['Cottage Oak', 'Farmhouse Pine', 'Rustic Elm', 'Barn Door', 'Stable Door', 'Country Charm'],
-                traditional: ['Victorian Panel', 'Georgian Classic', 'Edwardian Elite', 'Heritage Oak', 'Period Pine', 'Classic Crown'],
-                urban: ['Metropolitan', 'City Loft', 'Minimalist', 'Contemporary Glass', 'Modern Vision', 'Urban Edge']
-            },
-            pvcu: {
-                allure: ['Diamond', 'Crystal', 'Sapphire', 'Pearl', 'Opal', 'Ruby'],
-                lorimer: ['Windsor', 'Chester', 'Brighton', 'Cambridge', 'Oxford', 'Lancaster']
-            }
-        };
-
-        // Door colors - add more colors as needed
-        const doorColors = [
-            'Anthracite Grey',
-            'Chartwell Green',
-            'Black',
-            'White',
-            'Cream',
-            'Oak',
-            'Rosewood',
-            'Irish Oak',
-            'Light Oak',
-            'Golden Oak',
-            'Grey'
+        // List of door images in root folder
+        // Format: {range}-{collection}-{style_name}-{color}.jpg
+        // Use underscores for multi-word names: pvc-allure-tokyo-golden_oak.jpg
+        const doorImages = [
+            'pvc-allure-tokyo-golden_oak.jpg'
         ];
 
-        // Function to get a color for a door (cycles through colors)
-        function getDoorColor(index) {
-            return doorColors[index % doorColors.length];
+        // Map short range names to full identifiers used in HTML
+        const rangeMap = {
+            'pvc': 'pvcu',
+            'pvcu': 'pvcu',
+            'timberluxe': 'timberluxe',
+            'timber': 'timberluxe'
+        };
+
+        // Parse filename to extract door data
+        function parseFilename(filename) {
+            // Remove extension
+            const name = filename.replace(/\.(jpg|jpeg|png|webp)$/i, '');
+            const parts = name.split('-');
+
+            if (parts.length < 4) {
+                console.warn(`Invalid filename format: ${filename}`);
+                return null;
+            }
+
+            // Extract parts and convert underscores to spaces, then capitalize
+            const rawRange = parts[0].toLowerCase();
+            const range = rangeMap[rawRange] || rawRange; // Map to full range name
+            const collection = parts[1].toLowerCase();
+            const styleName = formatName(parts[2]);
+            const color = formatName(parts.slice(3).join('-')); // Join remaining parts for color (in case of hyphens)
+
+            return { range, collection, styleName, color, filename };
         }
+
+        // Format name: replace underscores with spaces and capitalize each word
+        function formatName(str) {
+            return str.replace(/_/g, ' ')
+                      .split(' ')
+                      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                      .join(' ');
+        }
+
+        // Build doorStyles data structure from images
+        const doorStyles = {};
+        doorImages.forEach(filename => {
+            const parsed = parseFilename(filename);
+            if (!parsed) return;
+
+            if (!doorStyles[parsed.range]) {
+                doorStyles[parsed.range] = {};
+            }
+            if (!doorStyles[parsed.range][parsed.collection]) {
+                doorStyles[parsed.range][parsed.collection] = [];
+            }
+
+            doorStyles[parsed.range][parsed.collection].push({
+                name: parsed.styleName,
+                color: parsed.color,
+                image: parsed.filename
+            });
+        });
 
         const rangeNames = {
             timberluxe: 'TimberLuxe',
@@ -934,30 +965,34 @@
         function displayStyles(range, collection) {
             const styleGrid = document.getElementById('styleGrid');
             const emptyState = document.getElementById('emptyState');
-            const styles = doorStyles[range][collection];
-            
+            const styles = doorStyles[range] && doorStyles[range][collection];
+
             // Hide empty state
             emptyState.style.display = 'none';
-            
+
             styleGrid.innerHTML = '';
-            
-            styles.forEach((style, index) => {
-                const color = getDoorColor(index);
+
+            if (!styles || styles.length === 0) {
+                styleGrid.innerHTML = '<div style="padding: 20px; color: #999;">No doors found for this collection</div>';
+                return;
+            }
+
+            styles.forEach((door) => {
                 const styleCard = document.createElement('div');
                 styleCard.className = 'style-card';
                 styleCard.innerHTML = `
                     <div class="style-image">
-                        <img src="Toyko_GoldenOak_Adina.jpg" alt="${style}">
+                        <img src="${door.image}" alt="${door.name}">
                     </div>
-                    <div class="style-name">${style}</div>
-                    <div class="style-color">${color}</div>
+                    <div class="style-name">${door.name}</div>
+                    <div class="style-color">${door.color}</div>
                 `;
-                
+
                 // Add click handler to open modal
                 styleCard.addEventListener('click', function() {
-                    openModal(style, collectionNames[collection], color);
+                    openModal(door.name, collectionNames[collection], door.color, door.image);
                 });
-                
+
                 styleGrid.appendChild(styleCard);
             });
         }
@@ -970,8 +1005,8 @@
         const modalSubtitle = document.getElementById('modalSubtitle');
         const modalColor = document.getElementById('modalColor');
 
-        function openModal(doorName, collectionName, color) {
-            modalImage.innerHTML = `<img src="Toyko_GoldenOak_Adina.jpg" alt="${doorName}">`;
+        function openModal(doorName, collectionName, color, imageSrc) {
+            modalImage.innerHTML = `<img src="${imageSrc}" alt="${doorName}">`;
             modalTitle.textContent = doorName;
             modalSubtitle.textContent = collectionName;
             modalColor.textContent = color;
