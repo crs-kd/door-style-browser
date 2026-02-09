@@ -1336,45 +1336,13 @@
 
         // Select door style and jump to form
         function selectDoorStyle(doorStyle) {
-            // Try to find the hidden field in parent window (for iframe embed)
-            let hiddenField = null;
-
+            // Send message to parent window (works cross-origin)
             if (window.parent && window.parent !== window) {
-                // We're in an iframe, look in parent document
-                try {
-                    hiddenField = window.parent.document.querySelector('input[name="door_style"]');
-                } catch (e) {
-                    console.log('Cannot access parent document');
-                }
-            }
-
-            // Also try current document (in case not in iframe)
-            if (!hiddenField) {
-                hiddenField = document.querySelector('input[name="door_style"]');
-            }
-
-            // Set the hidden field value
-            if (hiddenField) {
-                hiddenField.value = doorStyle;
-            }
-
-            // Jump to the form block
-            if (window.parent && window.parent !== window) {
-                // We're in an iframe, scroll parent to the form
-                try {
-                    const formBlock = window.parent.document.getElementById('lp-pom-block-52');
-                    if (formBlock) {
-                        formBlock.scrollIntoView({ behavior: 'smooth' });
-                    }
-                } catch (e) {
-                    console.log('Cannot access parent document');
-                }
-            } else {
-                // Not in iframe, try current document
-                const formBlock = document.getElementById('lp-pom-block-52');
-                if (formBlock) {
-                    formBlock.scrollIntoView({ behavior: 'smooth' });
-                }
+                window.parent.postMessage({
+                    type: 'doorStyleSelected',
+                    doorStyle: doorStyle,
+                    scrollTo: 'lp-pom-block-52'
+                }, '*');
             }
         }
 
