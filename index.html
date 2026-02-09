@@ -39,12 +39,26 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            background-image: url('pvcu-allure-venice-golden_oak.jpg');
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 100;
             transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .splash-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #041244;
+            opacity: 0.85;
+            z-index: 1;
         }
 
         .splash-screen.hidden {
@@ -54,6 +68,8 @@
         }
 
         .splash-content {
+            position: relative;
+            z-index: 2;
             text-align: center;
             padding: 40px;
             max-width: 900px;
@@ -63,13 +79,13 @@
             font-family: 'span', 'proxima-nova', sans-serif;
             font-size: 2.5em;
             font-weight: 700;
-            color: #2c3e50;
+            color: white;
             margin-bottom: 12px;
         }
 
         .splash-subtitle {
             font-size: 1.1em;
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 40px;
         }
 
@@ -530,10 +546,29 @@
         }
 
         .style-color {
-            padding: 0 12px 12px;
+            padding: 0 12px 8px;
             text-align: center;
             font-size: 0.85em;
             color: #999;
+        }
+
+        .style-quote-btn {
+            display: block;
+            margin: 0 auto 12px;
+            padding: 10px 16px;
+            background: #f29300;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            text-align: center;
+        }
+
+        .style-quote-btn:hover {
+            background: #d97f00;
         }
 
         /* Modal/Lightbox */
@@ -896,7 +931,13 @@
             }
 
             .style-color {
-                padding: 0 8px 8px;
+                padding: 0 8px 4px;
+                font-size: 0.7em;
+            }
+
+            .style-quote-btn {
+                margin: 0 8px 8px;
+                padding: 6px 8px;
                 font-size: 0.7em;
             }
 
@@ -1263,6 +1304,7 @@
 
             styles.forEach((door) => {
                 const isDoorOfMonth = doorOfTheMonth.includes(door.name);
+                const doorStyleValue = `${rangeNames[range]} - ${collectionNames[collection]} - ${door.name} - ${door.color}`;
                 const styleCard = document.createElement('div');
                 styleCard.className = isDoorOfMonth ? 'style-card door-of-month' : 'style-card';
                 styleCard.innerHTML = `
@@ -1272,15 +1314,68 @@
                     </div>
                     <div class="style-name">${door.name}</div>
                     <div class="style-color">${door.color}</div>
+                    <button class="style-quote-btn" data-door-style="${doorStyleValue}">Get Quote</button>
                 `;
 
-                // Add click handler to open modal
-                styleCard.addEventListener('click', function() {
+                // Add click handler for image to open modal
+                const styleImage = styleCard.querySelector('.style-image');
+                styleImage.addEventListener('click', function() {
                     openModal(door.name, collectionNames[collection], door.color, door.image, isDoorOfMonth);
+                });
+
+                // Add click handler for quote button
+                const quoteBtn = styleCard.querySelector('.style-quote-btn');
+                quoteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectDoorStyle(this.dataset.doorStyle);
                 });
 
                 styleGrid.appendChild(styleCard);
             });
+        }
+
+        // Select door style and jump to form
+        function selectDoorStyle(doorStyle) {
+            // Try to find the hidden field in parent window (for iframe embed)
+            let hiddenField = null;
+
+            if (window.parent && window.parent !== window) {
+                // We're in an iframe, look in parent document
+                try {
+                    hiddenField = window.parent.document.querySelector('input[name="door_style"]');
+                } catch (e) {
+                    console.log('Cannot access parent document');
+                }
+            }
+
+            // Also try current document (in case not in iframe)
+            if (!hiddenField) {
+                hiddenField = document.querySelector('input[name="door_style"]');
+            }
+
+            // Set the hidden field value
+            if (hiddenField) {
+                hiddenField.value = doorStyle;
+            }
+
+            // Jump to the form block
+            if (window.parent && window.parent !== window) {
+                // We're in an iframe, scroll parent to the form
+                try {
+                    const formBlock = window.parent.document.getElementById('lp-pom-block-52');
+                    if (formBlock) {
+                        formBlock.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } catch (e) {
+                    console.log('Cannot access parent document');
+                }
+            } else {
+                // Not in iframe, try current document
+                const formBlock = document.getElementById('lp-pom-block-52');
+                if (formBlock) {
+                    formBlock.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
         }
 
         // Modal functionality
