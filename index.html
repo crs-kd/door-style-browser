@@ -29,6 +29,131 @@
             box-shadow: none;
             display: flex;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fafafa 0%, #f0f0f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.02);
+        }
+
+        .splash-content {
+            text-align: center;
+            padding: 40px;
+            max-width: 900px;
+        }
+
+        .splash-title {
+            font-family: 'span', 'proxima-nova', sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+        }
+
+        .splash-subtitle {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .splash-cards {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .splash-card {
+            width: 280px;
+            background: white;
+            border: 2px solid #e8e8e8;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .splash-card:hover {
+            border-color: #f29300;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .splash-card-image {
+            width: 100%;
+            height: 320px;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .splash-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .splash-card:hover .splash-card-image img {
+            transform: scale(1.05);
+        }
+
+        .splash-card-content {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .splash-card-name {
+            font-family: 'span', 'proxima-nova', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 6px;
+        }
+
+        .splash-card-tagline {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .splash-card-cta {
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #f29300;
+            transition: color 0.3s ease;
+        }
+
+        .splash-card:hover .splash-card-cta {
+            color: #d97f00;
+        }
+
+        /* Browse mode - panels initially hidden */
+        .nav-panel,
+        .style-panel {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+        }
+
+        .container.browse-mode .nav-panel,
+        .container.browse-mode .style-panel {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Left Navigation Panel */
@@ -333,17 +458,45 @@
 
         .style-card {
             border: 2px solid #e8e8e8;
-            border-radius: 4px;
+            border-radius: 0;
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
             background: white;
+            position: relative;
         }
 
         .style-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             border-color: #f29300;
+        }
+
+        /* Door of the Month styles */
+        .style-card.door-of-month {
+            border-color: #C9388A;
+            border-width: 2px;
+        }
+
+        .style-card.door-of-month:hover {
+            border-color: #a82d72;
+        }
+
+        .door-of-month-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #C9388A;
+            color: white;
+            font-size: 0.6em;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            line-height: 1;
         }
 
         .style-image {
@@ -464,6 +617,17 @@
             border-top: 1px solid #e8e8e8;
         }
 
+        .modal-badge {
+            background: #C9388A;
+            color: white;
+            text-align: center;
+            padding: 8px 16px;
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .modal-title {
             font-size: 1.1em;
             font-weight: 700;
@@ -504,6 +668,62 @@
             body {
                 padding: 0;
             }
+
+            /* Mobile splash screen */
+            .splash-content {
+                padding: 20px;
+            }
+
+            .splash-title {
+                font-size: 1.6em;
+                margin-bottom: 8px;
+            }
+
+            .splash-subtitle {
+                font-size: 0.9em;
+                margin-bottom: 24px;
+            }
+
+            .splash-cards {
+                flex-direction: column;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .splash-card {
+                width: 100%;
+                max-width: 260px;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .splash-card-image {
+                width: 100px;
+                height: auto;
+                min-height: 120px;
+            }
+
+            .splash-card-content {
+                padding: 16px;
+                text-align: left;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .splash-card-name {
+                font-size: 1.1em;
+            }
+
+            .splash-card-tagline {
+                font-size: 0.75em;
+                margin-bottom: 8px;
+            }
+
+            .splash-card-cta {
+                font-size: 0.8em;
+            }
+
             .container {
                 flex-direction: column;
                 height: 680px;
@@ -694,6 +914,36 @@
 </head>
 <body>
     <div class="container">
+        <!-- Splash Screen -->
+        <div class="splash-screen" id="splashScreen">
+            <div class="splash-content">
+                <div class="splash-title">Explore Our Door Ranges</div>
+                <div class="splash-subtitle">Choose a range to discover your perfect door</div>
+                <div class="splash-cards">
+                    <div class="splash-card" data-range="timberluxe">
+                        <div class="splash-card-image">
+                            <img src="pvcu-allure-venice-golden_oak.jpg" alt="TimberLuxe">
+                        </div>
+                        <div class="splash-card-content">
+                            <div class="splash-card-name">TimberLuxe</div>
+                            <div class="splash-card-tagline">Engineered Timber Composite</div>
+                            <div class="splash-card-cta">Explore Range →</div>
+                        </div>
+                    </div>
+                    <div class="splash-card" data-range="pvcu">
+                        <div class="splash-card-image">
+                            <img src="pvcu-allure-tokyo-white.jpg" alt="PVCu">
+                        </div>
+                        <div class="splash-card-content">
+                            <div class="splash-card-name">PVCu</div>
+                            <div class="splash-card-tagline">Premium PVCu Doors</div>
+                            <div class="splash-card-cta">Explore Range →</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Left Navigation Panel -->
         <div class="nav-panel">
             <!-- Range Selector -->
@@ -826,6 +1076,32 @@
     </div>
 
     <script>
+        // Splash screen functionality
+        const splashScreen = document.getElementById('splashScreen');
+        const container = document.querySelector('.container');
+        const splashCards = document.querySelectorAll('.splash-card');
+
+        splashCards.forEach(card => {
+            card.addEventListener('click', function() {
+                const range = this.dataset.range;
+
+                // Hide splash screen
+                splashScreen.classList.add('hidden');
+
+                // Enable browse mode
+                container.classList.add('browse-mode');
+
+                // After transition, select the range
+                setTimeout(() => {
+                    // Find and click the corresponding range tab
+                    const rangeTab = document.querySelector(`.range-tab[data-range="${range}"]`);
+                    if (rangeTab) {
+                        rangeTab.click();
+                    }
+                }, 300);
+            });
+        });
+
         // List of door images in root folder
         // Format: {range}-{collection}-{style_name}-{color}.jpg
         // Use underscores for multi-word names: pvc-allure-tokyo-golden_oak.jpg
@@ -840,6 +1116,10 @@
             'pvcu-allure-sydney-rosewood.jpg',
             'pvcu-allure-vienna-anthracite_grey.jpg',
             'pvcu-allure-venice-golden_oak.jpg'
+        ];
+
+        // Door of the Month - list style names that qualify for discounts
+        const doorOfTheMonth = [
         ];
 
         // Map short range names to full identifiers used in HTML
@@ -982,9 +1262,11 @@
             }
 
             styles.forEach((door) => {
+                const isDoorOfMonth = doorOfTheMonth.includes(door.name);
                 const styleCard = document.createElement('div');
-                styleCard.className = 'style-card';
+                styleCard.className = isDoorOfMonth ? 'style-card door-of-month' : 'style-card';
                 styleCard.innerHTML = `
+                    ${isDoorOfMonth ? '<div class="door-of-month-badge">Door of the Month</div>' : ''}
                     <div class="style-image">
                         <img src="${door.image}" alt="${door.name}">
                     </div>
@@ -994,7 +1276,7 @@
 
                 // Add click handler to open modal
                 styleCard.addEventListener('click', function() {
-                    openModal(door.name, collectionNames[collection], door.color, door.image);
+                    openModal(door.name, collectionNames[collection], door.color, door.image, isDoorOfMonth);
                 });
 
                 styleGrid.appendChild(styleCard);
@@ -1009,11 +1291,23 @@
         const modalSubtitle = document.getElementById('modalSubtitle');
         const modalColor = document.getElementById('modalColor');
 
-        function openModal(doorName, collectionName, color, imageSrc) {
+        function openModal(doorName, collectionName, color, imageSrc, isDoorOfMonth) {
             modalImage.innerHTML = `<img src="${imageSrc}" alt="${doorName}">`;
             modalTitle.textContent = doorName;
             modalSubtitle.textContent = collectionName;
             modalColor.textContent = color;
+
+            // Handle Door of the Month badge in modal
+            const existingBadge = document.querySelector('.modal-content .modal-badge');
+            if (existingBadge) existingBadge.remove();
+
+            if (isDoorOfMonth) {
+                const badge = document.createElement('div');
+                badge.className = 'modal-badge';
+                badge.textContent = 'Door of the Month';
+                document.querySelector('.modal-content').insertBefore(badge, modalImage);
+            }
+
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
