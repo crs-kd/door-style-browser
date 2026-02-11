@@ -230,6 +230,14 @@
             border-bottom-color: #f29300;
         }
 
+        .range-thumbnail {
+            width: 100%;
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
         .range-name {
             font-size: 1.1em;
             font-weight: 700;
@@ -992,10 +1000,12 @@
             <div class="range-selector">
                 <div class="range-tabs">
                     <button class="range-tab timber" data-range="timberluxe">
+                        <img class="range-thumbnail" src="timberluxe-thumbnail.jpg" alt="TimberLuxe">
                         <div class="range-name">TimberLuxe</div>
                         <div class="range-tagline">Engineered Timber Composite</div>
                     </button>
                     <button class="range-tab pvcu" data-range="pvcu">
+                        <img class="range-thumbnail" src="pvcu-thumbnail.jpg" alt="PVCu">
                         <div class="range-name">PVCu</div>
                         <div class="range-tagline">Premium PVCu Doors</div>
                     </button>
