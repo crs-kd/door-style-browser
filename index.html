@@ -39,7 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('pvcu-allure-venice-golden_oak.jpg');
+            background-image: url('crsmith-background.jpeg');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -450,8 +450,9 @@
 
         /* Range selected state */
         .empty-state.range-selected {
-            background-image: none;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         .empty-state.range-selected::before {
@@ -1342,6 +1343,14 @@
                 const emptyState = document.getElementById('emptyState');
                 emptyState.style.display = 'flex';
                 emptyState.classList.add('range-selected');
+
+                // Set range-specific background image
+                const rangeBackgrounds = {
+                    'pvcu': 'pvcu-background.jpg',
+                    'timberluxe': 'timberluxe-background.jpg'
+                };
+                emptyState.style.backgroundImage = `url('${rangeBackgrounds[range] || ''}')`;
+
                 document.querySelectorAll('.collection-btn').forEach(btn => btn.classList.remove('active'));
 
                 // Remove collection-selected class since no collection is selected
